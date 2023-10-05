@@ -4,21 +4,23 @@ import {Component} from 'react'
 import SuggestionItem from '../SuggestionItem'
 
 class GoogleSuggestions extends Component {
-  state = {searchInput: '', placeHolder: 'Search Google'}
+  state = {searchInput: ''}
 
   onChangeSearchInput = event => {
     this.setState({searchInput: event.target.value})
   }
 
   onSearchSuggestion = suggestion => {
-    this.setState({searchInput: suggestion, placeHolder: suggestion})
+    this.setState({searchInput: suggestion})
   }
 
   render() {
     const {suggestionsList} = this.props
-    const {searchInput, placeHolder} = this.state
+    const {searchInput} = this.state
     const searchResult = suggestionsList.filter(eachSuggestion =>
-      eachSuggestion.suggestion.includes(searchInput),
+      eachSuggestion.suggestion
+        .toLowerCase()
+        .includes(searchInput.toLowerCase()),
     )
 
     return (
@@ -37,7 +39,8 @@ class GoogleSuggestions extends Component {
             />
             <input
               type="search"
-              placeholder={placeHolder}
+              placeholder="Search Google"
+              value={searchInput}
               className="search-input"
               onChange={this.onChangeSearchInput}
             />
@@ -49,7 +52,6 @@ class GoogleSuggestions extends Component {
               suggestionsList={eachItem}
               key={eachItem.id}
               onSearchSuggestion={this.onSearchSuggestion}
-              value={searchInput}
             />
           ))}
         </ul>
